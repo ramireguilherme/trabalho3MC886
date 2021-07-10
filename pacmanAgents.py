@@ -12,12 +12,14 @@
 # Pieter Abbeel (pabbeel@cs.berkeley.edu).
 
 
+from statemachine import StateMachine
 from pacman import Directions
 from game import Agent
 import random
 import game
 import util
-
+from statemachine import StateMachine
+from util import manhattanDistance
 class LeftTurnAgent(game.Agent):
     "An agent that turns left at every opportunity"
 
@@ -47,6 +49,44 @@ class GreedyAgent(Agent):
         bestScore = max(scored)[0]
         bestActions = [pair[1] for pair in scored if pair[0] == bestScore]
         return random.choice(bestActions)
+
+class evolAgent( Agent ):
+  """
+  Evolutionary Agent.
+  """
+  def __init__(self, p):
+      self.index = 0
+      self.p = p
+      self.statemachine = StateMachine(p)
+
+  def getCorridorType(self,state):
+      pac_pos = state.getPacmanPosition()
+      corridor_type = ""
+      front = state.hasWall(pac_pos[0]+1,pac_pos[1])
+      back = state.hasWall(pac_pos[0]-1,pac_pos[1])#atras
+      left = state.hasWall(pac_pos[0],pac_pos[1]+1)#direita 
+      right = state.hasWall(pac_pos[0],pac_pos[1]-1)#esquerda
+      if (front and back and left and right):
+          corridor_type = "+"
+      elif(() or ()):
+          corridor_type = ""
+      return corridor_type
+
+  def getAction( self, state ):
+    #print(state.getPacmanState())
+    #distance = manhattanDistance(pacmanpostion, ghostposition)
+    #print(state.getGhostPositions())
+    ghostpositions = state.getGhostPositions()
+    distances = []
+    for ghostposition in ghostpositions:
+        distance = manhattanDistance(ghostposition, state.getPacmanPosition())
+        distances.append(distance)
+        print(manhattanDistance(state.getPacmanPosition(), ghostposition))
+    min_distance = min(distances)
+    
+    #move = self.statemachine.getmove(distance)
+
+    return random.choice( state.getLegalActions( self.index ) )
 
 def scoreEvaluation(state):
     return state.getScore()
