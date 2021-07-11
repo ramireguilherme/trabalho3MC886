@@ -645,7 +645,10 @@ def runGames( layout, pacman, ghosts, display, numGames, record, numTraining = 0
         else:
             gameDisplay = display
             rules.quiet = False
-        pman = pacmanAgents.evolAgent(p = [2])
+        p = [random.randint(0,10) for i in range(14)]
+        p[0] = 3
+        print(p ," vetor aleatorio")
+        pman = pacmanAgents.evolAgent(p)
 
         game = rules.newGame( layout, pman, ghosts, gameDisplay, beQuiet, catchExceptions)
         game.run()

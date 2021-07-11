@@ -62,31 +62,55 @@ class evolAgent( Agent ):
   def getCorridorType(self,state):
       pac_pos = state.getPacmanPosition()
       corridor_type = ""
-      front = state.hasWall(pac_pos[0]+1,pac_pos[1])
-      back = state.hasWall(pac_pos[0]-1,pac_pos[1])#atras
-      left = state.hasWall(pac_pos[0],pac_pos[1]+1)#direita 
-      right = state.hasWall(pac_pos[0],pac_pos[1]-1)#esquerda
-      if (front and back and left and right):
+      num_walls = 0
+#      for i in range(-1,2):
+#          for j in range(-1,2):
+#                if state.hasWall(pac_pos[0]+i,pac_pos[1]+j):
+#                    num_walls += 1
+        
+      front =  state.hasWall(pac_pos[0]+1,pac_pos[1])
+      back =  state.hasWall(pac_pos[0]-1,pac_pos[1])
+      left = state.hasWall(pac_pos[0],pac_pos[1]+1) 
+      right = state.hasWall(pac_pos[0],pac_pos[1]-1)
+      if(front):
+          num_walls += 1
+      if (back):
+          num_walls += 1
+      if (left):
+          num_walls += 1
+      if (right):
+          num_walls += 1 
+    
+      if (num_walls == 0):
           corridor_type = "+"
-      elif(() or ()):
-          corridor_type = ""
+      elif(num_walls == 2):
+          if ((right and left) or (front and back)):
+            corridor_type = "C"
+          else:
+            corridor_type = "L"
+      elif(num_walls == 1):
+          corridor_type = "T"
+      #print("corredor: " + str(corridor_type))
+      #nao esta reconhecendo Ts
+      #adicionar caso extra de não reconhecer
       return corridor_type
 
   def getAction( self, state ):
+    current = state.getPacmanState().configuration.direction
+
     #print(state.getPacmanState())
-    #distance = manhattanDistance(pacmanpostion, ghostposition)
     #print(state.getGhostPositions())
     ghostpositions = state.getGhostPositions()
     distances = []
     for ghostposition in ghostpositions:
         distance = manhattanDistance(ghostposition, state.getPacmanPosition())
         distances.append(distance)
-        print(manhattanDistance(state.getPacmanPosition(), ghostposition))
+        #print(manhattanDistance(state.getPacmanPosition(), ghostposition))
     min_distance = min(distances)
-    
-    #move = self.statemachine.getmove(distance)
+    corridor = self.getCorridorType(state)
+    move = self.statemachine.getmove(min_distance,corridor,state)
 
-    return random.choice( state.getLegalActions( self.index ) )
+    return move
 
 def scoreEvaluation(state):
     return state.getScore()
