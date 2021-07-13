@@ -63,11 +63,6 @@ class evolAgent( Agent ):
       pac_pos = state.getPacmanPosition()
       corridor_type = ""
       num_walls = 0
-#      for i in range(-1,2):
-#          for j in range(-1,2):
-#                if state.hasWall(pac_pos[0]+i,pac_pos[1]+j):
-#                    num_walls += 1
-        
       front =  state.hasWall(pac_pos[0]+1,pac_pos[1])
       back =  state.hasWall(pac_pos[0]-1,pac_pos[1])
       left = state.hasWall(pac_pos[0],pac_pos[1]+1) 

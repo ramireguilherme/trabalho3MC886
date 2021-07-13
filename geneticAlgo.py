@@ -2,9 +2,11 @@ import random
 from pacman import runGames
 import numpy as np
 class genetic():
-    def __init__(self,popsize):
+    def __init__(self,popsize,crossover_rate,mutation_rate):
         self.popsize = popsize
-        pass
+        self.crossover_rate = crossover_rate
+        self.mutation_rate = mutation_rate
+
     def generate_initial_pop(self, pop_size, gene_size):
         """
         
@@ -16,6 +18,12 @@ class genetic():
             p[0] = random.randint(1,20)
         return individuals
 
+    def next_generation(self,parents):
+        
+        if random.randrange(100) < self.crossover_rate:
+            self.crossover(,,)
+        if random.randrange(100) < self.mutation_rate:
+            self.mutation()
     def train(self):
         individuals = self.generate_initial_pop(10,35)
         for generation in self.generations:
